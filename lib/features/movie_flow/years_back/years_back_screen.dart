@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movies_rating_app_flutter/core/constants.dart';
 import 'package:movies_rating_app_flutter/core/widgets/primary_button.dart';
+import 'package:movies_rating_app_flutter/features/movie_flow/result/result_screen.dart';
 
 class YearsBackScreen extends StatefulWidget {
   const YearsBackScreen(
@@ -63,7 +64,10 @@ class _YearsBackScreenState extends State<YearsBackScreen> {
               label: yearsBack.ceil().toString(),
             ),
             const Spacer(),
-            PrimaryButton(onPressed: widget.nextPage, text: 'Amazing'),
+            PrimaryButton(
+                onPressed: () =>
+                    Navigator.of(context).push(ResultScreen.route()),
+                text: 'Amazing'),
             const SizedBox(height: kMediumSpacing),
           ],
         ),
