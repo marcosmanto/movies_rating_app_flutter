@@ -29,6 +29,18 @@ class CustomTheme {
         elevation: 0,
         color: Palette.almostBlack,
       ),
+      sliderTheme: SliderThemeData(
+        activeTrackColor: const Color.fromARGB(196, 255, 255, 255),
+        inactiveTrackColor: Colors.grey.shade800,
+        thumbColor: Colors.white,
+        valueIndicatorColor: Colors.grey.shade800,
+        valueIndicatorTextStyle: TextStyle(
+            //color: Palette.almostBlack,
+            fontSize: 18,
+            fontWeight: FontWeight.bold),
+        inactiveTickMarkColor: Colors.transparent,
+        activeTickMarkColor: Colors.transparent,
+      ),
       textTheme: theme.primaryTextTheme.copyWith(
         labelLarge: theme.primaryTextTheme.labelLarge?.copyWith(
           color: Colors.white,
