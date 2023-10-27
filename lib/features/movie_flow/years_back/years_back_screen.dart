@@ -38,7 +38,7 @@ class _YearsBackScreenState extends State<YearsBackScreen> {
                   style: Theme.of(context).textTheme.displayLarge?.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      letterSpacing: -12,
+                      letterSpacing: -6,
                       height: .1),
                 ),
                 Text(
@@ -57,9 +57,9 @@ class _YearsBackScreenState extends State<YearsBackScreen> {
             Slider(
               value: yearsBack,
               onChanged: (value) => setState(() => yearsBack = value),
-              min: 1,
-              max: 10,
-              divisions: 9,
+              min: 0,
+              max: 70,
+              divisions: 69,
               label: yearsBack.ceil().toString(),
             ),
             const Spacer(),
