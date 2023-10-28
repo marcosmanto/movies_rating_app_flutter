@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movies_rating_app_flutter/core/constants.dart';
 import 'package:movies_rating_app_flutter/core/widgets/primary_button.dart';
 import 'package:movies_rating_app_flutter/features/movie_flow/genre/genre.dart';
+import 'package:movies_rating_app_flutter/features/movie_flow/movie_flow_controller.dart';
 import 'package:movies_rating_app_flutter/features/movie_flow/result/movie.dart';
 
-class ResultScreen extends StatelessWidget {
+class ResultScreen extends ConsumerWidget {
   static route({bool fullscreenDialog = true}) => MaterialPageRoute(
         builder: (context) => const ResultScreen(),
       );
@@ -12,19 +14,8 @@ class ResultScreen extends StatelessWidget {
 
   final double movieHeight = 150;
 
-  final movie = const Movie(
-    title: 'The Hulk',
-    overview:
-        'Bruce Banner, a genetics researcher with a tragic past, suffers an accident that causes hom to transform into a raging green monster when he gets angry.',
-    voteAverage: 4.8,
-    genres: [Genre(name: 'Action'), Genre(name: 'Fantasy')],
-    releaseDate: '2019-05-24',
-    backdropPath: '',
-    posterPath: '',
-  );
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(),
       body: Column(
@@ -40,7 +31,7 @@ class ResultScreen extends StatelessWidget {
                       width: MediaQuery.of(context).size.width,
                       bottom: -(movieHeight / 2),
                       child: MovieImageDetails(
-                        movie: movie,
+                        movie: ref.read(movieFlowControllerProvider).movie,
                         movieHeight: movieHeight,
                       ),
                     )
@@ -51,7 +42,7 @@ class ResultScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(vertical: 12, horizontal: 22),
                   child: Text(
-                    movie.overview,
+                    ref.read(movieFlowControllerProvider).movie.overview,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 )
@@ -140,7 +131,7 @@ class MovieImageDetails extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      '4.8',
+                      movie.voteAverage.toString(),
                       style: TextStyle(
                         color: Colors.white.withOpacity(.62),
                       ),
