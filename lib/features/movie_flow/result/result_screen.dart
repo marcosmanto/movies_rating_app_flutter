@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:movies_rating_app_flutter/core/constants.dart';
+import 'package:movies_rating_app_flutter/core/widgets/primary_button.dart';
 import 'package:movies_rating_app_flutter/features/movie_flow/genre/genre.dart';
 import 'package:movies_rating_app_flutter/features/movie_flow/result/movie.dart';
 
@@ -13,7 +15,7 @@ class ResultScreen extends StatelessWidget {
   final movie = const Movie(
     title: 'The Hulk',
     overview:
-        'Bruce Banner, a genetics researcher with a tragic past, suffers an accident.',
+        'Bruce Banner, a genetics researcher with a tragic past, suffers an accident that causes hom to transform into a raging green monster when he gets angry.',
     voteAverage: 4.8,
     genres: [Genre(name: 'Action'), Genre(name: 'Fantasy')],
     releaseDate: '2019-05-24',
@@ -43,10 +45,24 @@ class ResultScreen extends StatelessWidget {
                       ),
                     )
                   ],
+                ),
+                SizedBox(height: movieHeight / 2),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 22),
+                  child: Text(
+                    movie.overview,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                 )
               ],
             ),
-          )
+          ),
+          PrimaryButton(
+            onPressed: () => Navigator.of(context).pop(),
+            text: 'Find another movie',
+          ),
+          const SizedBox(height: kMediumSpacing),
         ],
       ),
     );
@@ -79,7 +95,9 @@ class CoverImage extends StatelessWidget {
           );
         },
         blendMode: BlendMode.dstIn,
-        child: Placeholder(),
+        child: Placeholder(
+          fallbackHeight: 298,
+        ),
       ),
     );
   }
@@ -105,6 +123,37 @@ class MovieImageDetails extends StatelessWidget {
             width: 100,
             height: movieHeight,
             child: const Placeholder(),
+          ),
+          const SizedBox(width: kMediumSpacing),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  movie.title,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                Text(
+                  movie.genresCommaSeparated,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                Row(
+                  children: [
+                    Text(
+                      '4.8',
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(.62),
+                      ),
+                    ),
+                    const Icon(
+                      Icons.star_rounded,
+                      size: 20,
+                      color: Colors.amber,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           )
         ],
       ),
