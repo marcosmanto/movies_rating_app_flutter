@@ -38,7 +38,7 @@ class _MovieFlowState extends State<MovieFlow> {
   Widget build(BuildContext context) {
     return PageView(
       controller: pageController,
-      //physics: const NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       children: [
         LandingScreen(nextPage: nextPage, previousPage: previousPage),
         GenreScreen(nextPage: nextPage, previousPage: previousPage),
