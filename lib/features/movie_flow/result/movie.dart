@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:movies_rating_app_flutter/features/movie_flow/genre/genre.dart';
+import 'package:movies_rating_app_flutter/features/movie_flow/result/movie_entity.dart';
 
 @immutable
 class Movie {
@@ -30,6 +30,21 @@ class Movie {
         releaseDate = '',
         backdropPath = '',
         posterPath = '';
+
+  factory Movie.fromEntity(MovieEntity entity, List<Genre> genres) {
+    return Movie(
+      title: entity.title,
+      overview: entity.overview,
+      voteAverage: entity.voteAverage,
+      genres: genres
+          .where((genre) => entity.genreIds.contains(genre.id))
+          .toList(growable: false),
+      releaseDate: entity.releaseDate,
+      backdropPath:
+          'https://image.tmdb.org/t/p/original/${entity.backdropPath}',
+      posterPath: 'https://image.tmdb.org/t/p/original/${entity.posterPath}',
+    );
+  }
 
   String get genresCommaSeparated =>
       genres.map((e) => e.name).toList().join(', ');

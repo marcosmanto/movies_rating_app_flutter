@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movies_rating_app_flutter/core/constants.dart';
 import 'package:movies_rating_app_flutter/core/widgets/primary_button.dart';
-import 'package:movies_rating_app_flutter/features/movie_flow/genre/genre.dart';
 import 'package:movies_rating_app_flutter/features/movie_flow/movie_flow_controller.dart';
 import 'package:movies_rating_app_flutter/features/movie_flow/result/movie.dart';
 
