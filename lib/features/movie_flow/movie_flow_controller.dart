@@ -31,7 +31,16 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
     state = state.copyWith(genres: const AsyncValue.loading());
     final result = await _movieService.getGenres();
 
-    state = state.copyWith(genres: AsyncValue.data(result));
+    result.when(
+      (genres) {
+        final updatedGenres = AsyncValue.data(genres);
+        state = state.copyWith(genres: updatedGenres);
+      },
+      (error) {
+        state =
+            state.copyWith(genres: AsyncValue.error(error, StackTrace.current));
+      },
+    );
   }
 
   Future<void> getRecommendedMovie() async {
@@ -47,7 +56,11 @@ class MovieFlowController extends StateNotifier<MovieFlowState> {
       selectedGenres,
     );
 
-    state = state.copyWith(movie: AsyncValue.data(result));
+    result.when(
+      (movie) => state = state.copyWith(movie: AsyncValue.data(movie)),
+      (error) => state =
+          state.copyWith(movie: AsyncValue.error(error, StackTrace.current)),
+    );
   }
 
   void toggleSelected(Genre genre) {
