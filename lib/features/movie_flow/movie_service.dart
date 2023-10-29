@@ -6,7 +6,7 @@ import 'package:movies_rating_app_flutter/features/movie_flow/movie_repository.d
 import 'package:movies_rating_app_flutter/features/movie_flow/result/movie.dart';
 
 final movieServiceProvider = Provider<MovieService>((ref) {
-  final movieRepository = ref.read(movieRepositoryProvider);
+  final movieRepository = ref.watch(movieRepositoryProvider);
   return TMDBMovieService(movieRepository);
 });
 

@@ -24,23 +24,30 @@ class GenreScreen extends ConsumerWidget {
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             Expanded(
-              child: ListView.separated(
-                padding: const EdgeInsets.symmetric(vertical: kListItemSpacing),
-                itemBuilder: (context, index) {
-                  final genre =
-                      ref.watch(movieFlowControllerProvider).genres[index];
-                  return ListCard(
-                    genre: genre,
-                    onTap: () => ref
-                        .watch(movieFlowControllerProvider.notifier)
-                        .toggleSelected(genre),
-                  );
-                },
-                separatorBuilder: (context, index) => const SizedBox(
-                  height: kListItemSpacing,
-                ),
-                itemCount: ref.watch(movieFlowControllerProvider).genres.length,
-              ),
+              child: ref.watch(movieFlowControllerProvider).genres.when(
+                    data: (genres) => ListView.separated(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: kListItemSpacing),
+                      itemBuilder: (context, index) {
+                        final genre = genres[index];
+                        return ListCard(
+                          genre: genre,
+                          onTap: () => ref
+                              .watch(movieFlowControllerProvider.notifier)
+                              .toggleSelected(genre),
+                        );
+                      },
+                      separatorBuilder: (context, index) => const SizedBox(
+                        height: kListItemSpacing,
+                      ),
+                      itemCount: genres.length,
+                    ),
+                    error: (e, s) =>
+                        const Text('Something went wrong on our end'),
+                    loading: () => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
             ),
             PrimaryButton(
               onPressed:

@@ -52,7 +52,7 @@ class YearsBackScreen extends ConsumerWidget {
             Slider(
               value: ref.read(movieFlowControllerProvider).yearsBack.toDouble(),
               onChanged: (value) => ref
-                  .read(movieFlowControllerProvider.notifier)
+                  .watch(movieFlowControllerProvider.notifier)
                   .updateYearsBack(value.toInt()),
               min: 0,
               max: 70,
@@ -61,9 +61,17 @@ class YearsBackScreen extends ConsumerWidget {
             ),
             const Spacer(),
             PrimaryButton(
-                onPressed: () =>
-                    Navigator.of(context).push(ResultScreen.route()),
-                text: 'Amazing'),
+              onPressed: () {
+                ref
+                    .watch(movieFlowControllerProvider.notifier)
+                    .getRecommendedMovie()
+                    .then((_) =>
+                        Navigator.of(context).push(ResultScreen.route()));
+              },
+              isLoading:
+                  ref.watch(movieFlowControllerProvider).movie is AsyncLoading,
+              text: 'Amazing',
+            ),
             const SizedBox(height: kMediumSpacing),
           ],
         ),

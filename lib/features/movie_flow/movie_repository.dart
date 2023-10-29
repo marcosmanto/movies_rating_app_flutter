@@ -48,7 +48,8 @@ class TMDBMovieRepository implements MovieRepository {
         'include_adult': false,
         'vote_average.gte': rating,
         'page': 1,
-        'release_date.gte': date,
+        'primary_release_year': date.substring(0, 4),
+        //'release_date.lte': date,
         'with_genres': genreIds,
       },
     );
