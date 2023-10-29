@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movies_rating_app_flutter/core/constants.dart';
+import 'package:movies_rating_app_flutter/core/failure.dart';
+import 'package:movies_rating_app_flutter/core/widgets/failure_screen.dart';
 import 'package:movies_rating_app_flutter/core/widgets/primary_button.dart';
 import 'package:movies_rating_app_flutter/features/movie_flow/movie_flow_controller.dart';
 import 'package:movies_rating_app_flutter/features/movie_flow/result/movie.dart';
@@ -57,8 +59,13 @@ class ResultScreen extends ConsumerWidget {
               ],
             ),
           ),
-          error: (e, s) =>
-              const Scaffold(body: Text('Something went wrong on our end')),
+          error: (e, s) {
+            if (e is Failure) {
+              return FailureScreen(message: e.message);
+            }
+            return const FailureScreen(
+                message: 'Something went wrong on our end');
+          },
           loading: () => const Scaffold(
             body: Center(
               child: CircularProgressIndicator(),
