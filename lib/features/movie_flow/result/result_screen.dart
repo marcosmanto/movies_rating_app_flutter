@@ -8,11 +8,75 @@ import 'package:movies_rating_app_flutter/core/widgets/primary_button.dart';
 import 'package:movies_rating_app_flutter/features/movie_flow/movie_flow_controller.dart';
 import 'package:movies_rating_app_flutter/features/movie_flow/result/movie.dart';
 
+class ResultScreenAnimator extends StatefulWidget {
+  const ResultScreenAnimator({super.key});
+
+  @override
+  State<ResultScreenAnimator> createState() => _ResultScreenAnimatorState();
+}
+
+class _ResultScreenAnimatorState extends State<ResultScreenAnimator>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller =
+        AnimationController(duration: const Duration(seconds: 1), vsync: this);
+
+    _controller.forward();
+
+    _controller.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ResultScreen(animationController: _controller);
+  }
+}
+
 class ResultScreen extends ConsumerWidget {
   static route({bool fullscreenDialog = true}) => MaterialPageRoute(
-        builder: (context) => const ResultScreen(),
+        builder: (context) => const ResultScreenAnimator(),
       );
-  const ResultScreen({super.key});
+
+  final AnimationController animationController;
+  final Animation<double> titleOpacity;
+  final Animation<double> genreOpacity;
+  final Animation<double> ratingOpacity;
+  final Animation<double> descriptionOpacity;
+  final Animation<double> buttonOpacity;
+
+  ResultScreen({required this.animationController, super.key})
+      : titleOpacity = Tween<double>(begin: 0, end: 1).animate(
+          CurvedAnimation(
+              parent: animationController, curve: const Interval(0, .3)),
+        ),
+        genreOpacity = Tween<double>(begin: 0, end: 1).animate(
+          CurvedAnimation(
+              parent: animationController, curve: const Interval(.3, .4)),
+        ),
+        ratingOpacity = Tween<double>(begin: 0, end: 1).animate(
+          CurvedAnimation(
+              parent: animationController, curve: const Interval(.4, .6)),
+        ),
+        descriptionOpacity = Tween<double>(begin: 0, end: 1).animate(
+          CurvedAnimation(
+              parent: animationController, curve: const Interval(.6, .8)),
+        ),
+        buttonOpacity = Tween<double>(begin: 0, end: 1).animate(
+          CurvedAnimation(
+              parent: animationController, curve: const Interval(.8, 1)),
+        );
 
   final double movieHeight = 150;
 
@@ -36,6 +100,9 @@ class ResultScreen extends ConsumerWidget {
                             child: MovieImageDetails(
                               movie: movie,
                               movieHeight: movieHeight,
+                              titleOpacity: titleOpacity,
+                              ratingOpacity: ratingOpacity,
+                              genreOpacity: genreOpacity,
                             ),
                           )
                         ],
@@ -44,17 +111,23 @@ class ResultScreen extends ConsumerWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             vertical: 12, horizontal: 22),
-                        child: Text(
-                          movie.overview,
-                          style: Theme.of(context).textTheme.bodyMedium,
+                        child: FadeTransition(
+                          opacity: descriptionOpacity,
+                          child: Text(
+                            movie.overview,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
                         ),
                       )
                     ],
                   ),
                 ),
-                PrimaryButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  text: 'Find another movie',
+                FadeTransition(
+                  opacity: buttonOpacity,
+                  child: PrimaryButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    text: 'Find another movie',
+                  ),
                 ),
                 const SizedBox(height: kMediumSpacing),
               ],
@@ -115,10 +188,16 @@ class MovieImageDetails extends StatelessWidget {
     super.key,
     required this.movie,
     required this.movieHeight,
+    required this.titleOpacity,
+    required this.genreOpacity,
+    required this.ratingOpacity,
   });
 
   final Movie movie;
   final double movieHeight;
+  final Animation<double> titleOpacity;
+  final Animation<double> genreOpacity;
+  final Animation<double> ratingOpacity;
 
   @override
   Widget build(BuildContext context) {
@@ -136,34 +215,43 @@ class MovieImageDetails extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  movie.title,
-                  style: Theme.of(context).textTheme.headlineSmall,
+                FadeTransition(
+                  opacity: titleOpacity,
+                  child: Text(
+                    movie.title,
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
                 ),
-                Text(
-                  movie.genresCommaSeparated,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                FadeTransition(
+                  opacity: genreOpacity,
+                  child: Text(
+                    movie.genresCommaSeparated,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                 ),
-                Row(
-                  children: [
-                    Text(
-                      movie.voteAverage.toString(),
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(.62),
+                FadeTransition(
+                  opacity: ratingOpacity,
+                  child: Row(
+                    children: [
+                      Text(
+                        movie.voteAverage.toString(),
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(.62),
+                        ),
                       ),
-                    ),
-                    const Icon(
-                      Icons.star_rounded,
-                      size: 20,
-                      color: Colors.amber,
-                    ),
-                    Text(
-                      '   ${movie.releaseDate.substring(0, 4)}',
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(.62),
+                      const Icon(
+                        Icons.star_rounded,
+                        size: 20,
+                        color: Colors.amber,
                       ),
-                    ),
-                  ],
+                      Text(
+                        '   ${movie.releaseDate.substring(0, 4)}',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(.62),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
